@@ -1,0 +1,18 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install Playwright browsers
+RUN npm install -g playwright && \
+    npx playwright install chromium --with-deps
+
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY screenshot-server.js ./
+
+EXPOSE 3008
+ENV PORT=3008
+ENV NODE_ENV=production
+
+CMD ["node", "screenshot-server.js"]
