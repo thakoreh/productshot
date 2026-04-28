@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 
-const SCREENSHOT_SERVER = process.env.SCREENSHOT_SERVER || 'http://localhost:3008'
+// Uses image.thum.io - a free screenshot service, no API key needed
+// Falls back gracefully if it fails
+const SCREENSHOT_SERVICE = 'https://image.thum.io/get/width/1200/crop/630/noanimate'
 
 export async function POST(request) {
   try {
@@ -19,8 +21,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Invalid URL' }, { status: 400 })
     }
 
-    // Call local Playwright screenshot server
-    const screenshotUrl = `${SCREENSHOT_SERVER}/screenshot?url=${encodeURIComponent(targetUrl)}`
+    const screenshotUrl = `${SCREENSHOT_SERVICE}/${encodeURIComponent(targetUrl)}`
 
     return NextResponse.json({
       success: true,
